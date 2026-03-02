@@ -32,11 +32,9 @@ TARGET_METHODS = [
 ]
 
 # 3. 数据集路径 (CRITICAL FIX)
-# 既然你的数据在 "预处理数据/2实体AI/..." 下面，
-# 我们必须把 "2实体AI", "3实体AI" 等文件夹作为根目录加进来。
+
 EXTRA_DATASET_ROOTS = [
     r"H:\SD exp plantform\GSA-Diffusion\datasets",
-    # 针对你的目录结构，显式添加这些分类文件夹：
     r"H:\SD exp plantform\GSA-Diffusion\datasets_storage\预处理数据\2实体AI",
     r"H:\SD exp plantform\GSA-Diffusion\datasets_storage\预处理数据\2实体coco style",
     r"H:\SD exp plantform\GSA-Diffusion\datasets_storage\预处理数据\3实体AI"
@@ -136,7 +134,7 @@ def build_mask_index(dataset_roots: List[Path], verbose: bool = False) -> Dict[T
     for root in dataset_roots:
         # print(f" -> Checking root: {root.name}")
 
-        # 这里的 ds_dir 应该是实际的数据集名 (例如 "杯子苹果桌面静物" 或 "car bus bike")
+        
         subdirs = [d for d in root.iterdir() if d.is_dir()]
 
         for ds_dir in subdirs:
