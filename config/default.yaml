@@ -1,0 +1,108 @@
+# ======================= 模型与数据路径 =======================
+paths:
+  # 基础 SD1.5 模型
+  base_model_path: "H:/huggingface-cache/hub/models--runwayml--stable-diffusion-v1-5/snapshots/451f4fe16113bff5a5d2269ed5ad43b0592e9a14"
+  # base_model_path: "runwayml/stable-diffusion-v1-5"
+
+  # 数据集根目录：下面按数字子文件夹组织
+  # datasets/
+  #   000001/
+  #     image.png
+  #     prompt.txt
+  #   000002/
+  #     ...
+  dataset_root: "datasets"
+
+  # 本次实验输出根目录（run_inference.py 会在里面再建时间戳/exp子目录）
+  output_root: "H:/SD exp plantform/GSA-Diffusion/outputs"
+
+# ======================= 生成与设备参数 =======================
+params:
+  width: 512
+  height: 512
+  num_inference_steps: 30
+  guidance_scale: 7.5
+  scheduler: "euler_a"      # euler_a, ddim, dpmsolver, heun 等
+
+  # 多个种子用于做重复实验 / 抗随机性
+  seeds: [23, 44, 77, 89, 123]
+
+  dtype: "float16"          # float16 / float32
+  enable_vae_slicing: true
+  enable_xformers: true
+
+  # 一次跑多少个样本（按数字子目录排序后截断）
+  # 支持：
+  #   null      -> 全部
+  #   5         -> 前 5 个
+  #   [13, 78]  -> 选取编号 13~78（含端点）；[0, 0] 表示全部
+  max_samples: null
+
+# ======================= ControlNet (Canny) =======================
+controlnet:
+  model_path: "H:/huggingface-cache/hub/models--lllyasviel--sd-controlnet-canny/snapshots/7f2f69197050967007f6bbd23ab5e52f0384162a"
+  conditioning_scale: 0.45      # 先用 0.2，和你之前 controlmap 那套接近
+  guess_mode: false
+  canny_low_threshold: 100
+  canny_high_threshold: 200
+
+# ======================= Grounded-SAM =======================
+grounder:
+  dino_id: "H:/huggingface-cache/hub/models--IDEA-Research--grounding-dino-base/snapshots/12bdfa3120f3e7ec7b434d90674b3396eccf88eb"
+  sam_id: "facebook/sam-vit-base"   # 如果 SAM 也有本地快照，同样写绝对路径
+  box_threshold: 0.2
+  text_threshold: 0.2
+  use_attr_prompt: false           # GroundingDINO 是否使用实体属性作为检测 prompt，默认只用类别名
+
+# ======================= 注入步数占比 =======================
+# 0~1 之间，表示只在前百分之多少步启用对应模块；1.0 表示全程启用
+injection:
+  controlnet_ratio: 0.4   # ControlNet 在前多少比例的步数参与 0.4 算上限了 再高无效
+  adi_ratio: 0.85          # ADI 在前多少比例的步数参与 0.6
+  adi_linear_decay: true   # 超过比例后对 ADI 做线性衰减到 0，避免突然关停  true or false
+
+# ======================= Prompt 解析（Step 1） =======================
+
+# ======================= ADI 参数 =======================
+adi:
+  alpha_g: 0.5       # 全局 prompt 权重
+  alpha_e: 1.2      # 实体注入权重
+  sharpen_t: 1.0      # 锐化阈值
+  enable_self_iso: true  # 是否启用 Self-Attention Isolation（w/o 实验请设为 false）
+  enable_global: true  # 是否开启全局背景注入
+
+planner:
+  # "rule" 用我们现在那套简单规则解析
+  # 以后你接 LLM 就改成 "llm"，然后在 planner.py 里实现 _llm_parse
+  mode: "llm"
+
+# ======================= 方法选择（baseline / 消融） =======================
+# 对齐你原来的  method / method_kwargs  习惯
+method: "methods.baseline"   # 或 "methods.adi_full" / "methods.adi_no_selfiso" 等
+method_kwargs: {}            # 传给 Method.__init__ 的额外参数
+
+# ======================= 文本相关（负面提示等） =======================
+prompt_config:
+  negative_prompt: "low quality, blurry, unfinished, cartoon, 3d model, bad anatomy"
+  positive_suffix: "photorealistic, 4k, highly detailed fur, cinematic lighting"  # 全局拼接到 prompt 和实体属性描述后
+
+# ======================= 评估 =======================
+evaluation:
+  mode: "A"                # A/B/C/D
+  run_dir: null            # 为空则默认取 outputs 下最新的 run 目录
+  device: "cuda"           # 尝试使用 GPU；如无则自动回落 CPU
+
+  clip_model_id: "H:/huggingface-cache/hub/models--openai--clip-vit-base-patch16/snapshots/57c216476eefef5ab752ec549e440a49ae4ae5f3"
+
+  color:                   # 模式 B
+    saturation_thresh: 0.25
+    value_thresh: 0.25
+
+  edge:                    # 模式 C
+    canny_low: null        # 若为空则使用 meta.json 中的阈值
+    canny_high: null
+
+  detection:               # 模式 D
+    dino_id: null          # 为空则沿用 grounder.dino_id
+    box_threshold: 0.25
+    text_threshold: 0.25

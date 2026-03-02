@@ -1,0 +1,17 @@
+{
+  "prompt": "a red bird, a blue bird, and a green bird sitting on the branch, photorealistic, highly detailed feathers",
+  "entities": [
+    {
+      "name": "bird",
+      "description": "red bird with photorealistic and highly detailed feathers"
+    },
+    {
+      "name": "bird",
+      "description": "blue bird with photorealistic and highly detailed feathers"
+    },
+    {
+      "name": "bird",
+      "description": "green bird with photorealistic and highly detailed feathers"
+    }
+  ]
+}

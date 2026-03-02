@@ -1,0 +1,17 @@
+{
+  "prompt": "a pink bird, a brown bird, and a silver metallic bird sitting on the branch, glossy feathers",
+  "entities": [
+    {
+      "name": "bird",
+      "description": "pink bird with glossy feathers"
+    },
+    {
+      "name": "bird",
+      "description": "brown bird with glossy feathers"
+    },
+    {
+      "name": "bird",
+      "description": "silver metallic bird with glossy feathers"
+    }
+  ]
+}

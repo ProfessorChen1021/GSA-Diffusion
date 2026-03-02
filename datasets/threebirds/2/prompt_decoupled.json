@@ -1,0 +1,17 @@
+{
+  "prompt": "a yellow bird, a purple bird, and a cyan bird sitting on the branch, soft daylight, shallow depth of field",
+  "entities": [
+    {
+      "name": "bird",
+      "description": "yellow bird"
+    },
+    {
+      "name": "bird",
+      "description": "purple bird"
+    },
+    {
+      "name": "bird",
+      "description": "cyan bird"
+    }
+  ]
+}

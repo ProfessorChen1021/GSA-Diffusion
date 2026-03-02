@@ -1,0 +1,17 @@
+[
+  {
+    "phrase_entity": "bird_1",
+    "phrase_ent_attr": "white bird",
+    "phrase_entity_base": "bird"
+  },
+  {
+    "phrase_entity": "bird_2",
+    "phrase_ent_attr": "black bird",
+    "phrase_entity_base": "bird"
+  },
+  {
+    "phrase_entity": "bird_3",
+    "phrase_ent_attr": "orange bird",
+    "phrase_entity_base": "bird"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "phrase_entity": "bird_1",
+    "phrase_ent_attr": "red bird with photorealistic and highly detailed feathers",
+    "phrase_entity_base": "bird"
+  },
+  {
+    "phrase_entity": "bird_2",
+    "phrase_ent_attr": "blue bird with photorealistic and highly detailed feathers",
+    "phrase_entity_base": "bird"
+  },
+  {
+    "phrase_entity": "bird_3",
+    "phrase_ent_attr": "green bird with photorealistic and highly detailed feathers",
+    "phrase_entity_base": "bird"
+  }
+]

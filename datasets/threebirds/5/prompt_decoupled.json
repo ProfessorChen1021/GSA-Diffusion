@@ -1,0 +1,17 @@
+{
+  "prompt": "a golden bird, a blue bird, and a red bird sitting on the branch, cinematic lighting",
+  "entities": [
+    {
+      "name": "bird",
+      "description": "golden bird"
+    },
+    {
+      "name": "bird",
+      "description": "blue bird"
+    },
+    {
+      "name": "bird",
+      "description": "red bird"
+    }
+  ]
+}
