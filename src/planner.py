@@ -210,7 +210,7 @@ class PromptEntityPlanner:
         raw = self.llm_fn(llm_prompt)
         text = raw.strip()
 
-        # 【增强】：去除可能存在的 Markdown 代码块标记
+        # 去除可能存在的 Markdown 代码块标记
         if text.startswith("```json"):
             text = text[7:]
         if text.startswith("```"):
@@ -242,3 +242,4 @@ class PromptEntityPlanner:
             ]
         print(f"[Planner] LLM-based entities: {entities}")
         return entities
+
