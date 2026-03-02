@@ -26,7 +26,7 @@ class SD15Pipeline:
 
         dtype = torch.float16 if str(dtype).lower() == "float16" else torch.float32
 
-        # 统一解析模型路径（兼容本地快照与在线模型名），并指定 H 盘缓存目录，避免重复下载。
+        # 统一解析模型路径（兼容本地快照与在线模型名），避免重复下载。
         resolved_model_path = resolve_model_identifier(model_path)
         self.pipe = StableDiffusionPipeline.from_pretrained(
             resolved_model_path,
