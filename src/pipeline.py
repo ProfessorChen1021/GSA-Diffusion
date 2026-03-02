@@ -73,7 +73,7 @@ class SamplePaths:
 
 class GSADiffusionPipeline:
     """
-    cfg 读取约定（推荐新版 YAML）：
+    cfg 读取：
 
     cfg["paths"]:
       base_model_path: ...
@@ -781,3 +781,4 @@ class GSADiffusionPipeline:
                 peak = torch.cuda.max_memory_allocated() / (1024 ** 3)
                 with open(os.path.join(seed_dir, "gpu_mem_gb.txt"), "w", encoding="utf-8") as f:
                     f.write(f"{peak:.3f} GB")
+
