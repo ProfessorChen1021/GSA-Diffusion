@@ -14,7 +14,7 @@ import os
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F  # 新增
+import torch.nn.functional as F
 from PIL import Image
 
 try:
@@ -29,7 +29,7 @@ class ADIContext:
         {
             "phrase_entity": "cat",
             "phrase_ent_attr": "a fluffy red cat",
-            "mask_tensor": torch.Tensor [1, 1, H, W] (0.0~1.0), # 新增：接收外部 Mask
+            "mask_tensor": torch.Tensor [1, 1, H, W] (0.0~1.0), # 接收外部 Mask
         }
     """
 
@@ -53,7 +53,7 @@ class ADIContext:
 
         with torch.inference_mode():
             for ent in self.entities:
-                # 1. 文本编码 (保持不变)
+                # 1. 文本编码
                 text_local = ent.get("phrase_ent_attr", ent.get("phrase_entity"))
                 tok_local = tokenizer(
                     text_local,
@@ -69,7 +69,7 @@ class ADIContext:
                 ent["token_ids"] = tok_local["input_ids"][0].detach().cpu()
                 ent["token_mask"] = tok_local["attention_mask"][0].detach().cpu().bool()
 
-                # 2. 实体竞争编码 (保持不变，虽然有 Mask 后这个没那么重要了，但保留作为 fallback)
+                # 2. 实体竞争编码 
                 text_ent = ent.get("phrase_entity", text_local)
                 tok_ent = tokenizer(
                     text_ent,
@@ -94,8 +94,6 @@ class ADIContext:
         self.capture_steps = set()
         self.attn_records = []
 
-
-# ... (前面 ADIContext 保持不变) ...
 
 
 class ADICrossAttnProcessor(AttnProcessor):
@@ -149,8 +147,8 @@ class ADICrossAttnProcessor(AttnProcessor):
 
     def _masked_self_attn(self, attn, hidden_states):
         """
-        PhD 级核心：自注意力隔离 (Self-Attention Isolation)
-        防止猫的纹理和兔子的纹理在 Self-Attention 层混合。
+        自注意力隔离 (Self-Attention Isolation)
+    
         """
         B, N, C = hidden_states.shape
         device = hidden_states.device
@@ -164,7 +162,6 @@ class ADICrossAttnProcessor(AttnProcessor):
         scores = torch.bmm(q, k.transpose(-1, -2)) * (1.0 / math.sqrt(q.shape[-1]))
 
         # 3. 构建隔离掩码 (Isolation Mask)
-        # 我们需要一个 [1, N, N] 的矩阵，如果 i,j 属于不同实体，则为 -inf
         side = int(math.sqrt(N))
 
         # 聚合所有实体的 Mask 索引
@@ -179,7 +176,6 @@ class ADICrossAttnProcessor(AttnProcessor):
                 flat = resized.view(-1)  # [N]
 
                 # 标记该实体的像素 (i+1)
-                # 注意：如果重叠，后一个覆盖前一个，这没关系
                 map_idx[flat > 0.5] = (i + 1)
 
         # 生成 N x N 矩阵
