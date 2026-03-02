@@ -5,9 +5,6 @@
 - 图片加载 / 枚举
 - Canny 边缘图生成
 - 路径相对化
-
-注意：
-- 不做主流程，只提供函数，保持和你旧脚本的接口尽量一致。
 """
 
 from __future__ import annotations
@@ -136,3 +133,4 @@ def relative_to(path: Path, base_dirs: Iterable[Path]) -> str:
         except ValueError:
             continue
     return str(path)
+
