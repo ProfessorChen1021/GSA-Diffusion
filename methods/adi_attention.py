@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 A-DI (Attention Decoupling & Injection) for SD15+ControlNet
-[PhD Version] - Integrated with Grounded-SAM Masks
 
-升级点：
 - 支持传入 Binary Mask (from Grounded-SAM)
 - 在推理时，根据当前层分辨率动态 Resize Mask
 - 强制 Attention 空间隔离：V_out = V_out * Mask
