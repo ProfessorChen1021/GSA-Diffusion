@@ -1,0 +1,91 @@
+# ======================= Paths =======================
+paths:
+  base_model_path: "stabilityai/stable-diffusion-xl-base-1.0"
+  dataset_root: "datasets"
+  output_root: "outputs"
+
+data:
+  # Same public-release setup as SD1.5: the repository includes a small
+  # demo subset plus the benchmark prompt manifest for public release.
+  mode: "auto"   # auto / sample_dirs / public_manifest
+  prompt_manifest: "datasets/benchmark_prompts.csv"   # public prompt list
+  prompt_column: "prompt"
+  scene_column: "scene"
+  sample_id_column: "sample_id"
+  dataset_group_column: "dataset_group"
+  prompt_id_column: "prompt_id"
+  seed_column: "seed"
+
+# ======================= Generation =======================
+params:
+  width: 1024
+  height: 1024
+  num_inference_steps: 30
+  guidance_scale: 5.0
+  scheduler: "euler_a"
+  seeds: [23, 44, 77, 89, 123]
+  dtype: "float16"
+  enable_vae_slicing: true
+  enable_xformers: true
+  pair_baseline: false
+  max_samples: null
+
+# ======================= ControlNet (Canny) =======================
+controlnet:
+  model_path: "diffusers/controlnet-canny-sdxl-1.0"
+  conditioning_scale: 0.45
+  guess_mode: false
+  canny_low_threshold: 100
+  canny_high_threshold: 200
+
+# ======================= Grounded-SAM =======================
+grounder:
+  dino_id: "IDEA-Research/grounding-dino-base"
+  sam_id: "facebook/sam-vit-base"
+  box_threshold: 0.2
+  text_threshold: 0.2
+  use_attr_prompt: false
+
+# ======================= Injection =======================
+injection:
+  controlnet_ratio: 0.4
+  adi_ratio: 0.0
+  adi_linear_decay: true
+
+# ======================= ADI =======================
+adi:
+  alpha_g: 0.5
+  alpha_e: 1.2
+  sharpen_t: 1.0
+  enable_self_iso: true
+  enable_global: true
+  self_iso_max_side: 32
+
+planner:
+  mode: "llm"
+
+method: "methods.baseline"
+method_kwargs: {}
+
+prompt_config:
+  negative_prompt: "low quality, blurry, unfinished, cartoon, 3d model, bad anatomy"
+  positive_suffix: "photorealistic, 4k, highly detailed fur, cinematic lighting"
+
+evaluation:
+  mode: "A"
+  run_dir: null
+  device: "cuda"
+  clip_model_id: "openai/clip-vit-base-patch16"
+
+  color:
+    saturation_thresh: 0.25
+    value_thresh: 0.25
+
+  edge:
+    canny_low: null
+    canny_high: null
+
+  detection:
+    dino_id: null
+    box_threshold: 0.25
+    text_threshold: 0.25

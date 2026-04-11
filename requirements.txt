@@ -1,0 +1,13 @@
+﻿torch
+diffusers
+transformers
+accelerate
+safetensors
+numpy
+opencv-python
+pillow
+pyyaml
+packaging
+openai
+tqdm
+
