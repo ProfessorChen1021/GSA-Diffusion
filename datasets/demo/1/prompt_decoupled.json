@@ -1,0 +1,13 @@
+{
+  "prompt": "a white cat and a blue rabbit sitting on the grass",
+  "entities": [
+    {
+      "name": "cat",
+      "description": "white cat"
+    },
+    {
+      "name": "rabbit",
+      "description": "blue rabbit"
+    }
+  ]
+}

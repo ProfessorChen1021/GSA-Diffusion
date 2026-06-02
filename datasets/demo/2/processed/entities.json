@@ -1,0 +1,10 @@
+[
+  {
+    "phrase_entity": "cat",
+    "phrase_ent_attr": "black cat"
+  },
+  {
+    "phrase_entity": "rabbit",
+    "phrase_ent_attr": "pink rabbit"
+  }
+]
